@@ -2,6 +2,7 @@ package blob
 
 // TODO: add `Client` struct interface
 // TODO: add login and accounts with admin page
+// TODO: add api doc
 
 import (
 	"fmt"
