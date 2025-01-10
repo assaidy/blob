@@ -17,10 +17,11 @@ const (
 )
 
 type Server struct {
-	rootDir   string
-	secretKey string
-	router    *fiber.App
-	metadata  *MetadataStorage
+	rootDir      string
+	secretKey    string
+	maxChunkSize DataUnite
+	router       *fiber.App
+	metadata     *MetadataStorage
 }
 
 type Bucket struct {

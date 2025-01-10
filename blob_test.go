@@ -45,7 +45,12 @@ func TestBlobServer(t *testing.T) {
 
 	go func() {
 		t.Log("starting blob server...")
-		s := NewServer(1*MB, "1234", "./root_dir", "./metadata_dir")
+		s := NewServer(ServerConfig{
+			MaxChunkSize: 1 * MB,
+			SecretKey:    "1234",
+			RootDir:      "./root_dir",
+			MetadataDir:  "./metadata_dir",
+		})
 		if err := s.Listen(":3000"); err != nil {
 			panic(err)
 		}
