@@ -70,6 +70,6 @@ func InternalServerError(err error) APIError {
 func UnauthorizedError() APIError {
 	return APIError{
 		Code:    fiber.StatusUnauthorized,
-		Message: "unauthorized",
+		Message: fiber.ErrUnauthorized.Message,
 	}
 }

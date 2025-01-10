@@ -67,7 +67,7 @@ func TestBlobServer(t *testing.T) {
 	if err != nil {
 		t.Fatal("error creating req: ", err)
 	}
-	req.Header.Set("Authorization", "Bearer 1234")
+	req.Header.Set("Secret-Key", "1234")
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		t.Fatal("error sending req: ", err)
@@ -88,7 +88,7 @@ func TestBlobServer(t *testing.T) {
 	if err != nil {
 		t.Fatal("error creating request: ", err)
 	}
-	req.Header.Set("Authorization", "Bearer 1234")
+	req.Header.Set("Secret-Key", "1234")
 	resp, err = http.DefaultClient.Do(req)
 	if err != nil {
 		t.Fatal("error sending request: ", err)
@@ -109,7 +109,7 @@ func TestBlobServer(t *testing.T) {
 	if err != nil {
 		t.Fatal("error creating upload request: ", err)
 	}
-	req.Header.Set("Authorization", "Bearer 1234")
+	req.Header.Set("Secret-Key", "1234")
 	req.Header.Set("Content-Type", "application/octet-stream")
 	resp, err = http.DefaultClient.Do(req)
 	if err != nil {
@@ -126,7 +126,7 @@ func TestBlobServer(t *testing.T) {
 	if err != nil {
 		t.Fatal("error creating request: ", err)
 	}
-	req.Header.Set("Authorization", "Bearer 1234")
+	req.Header.Set("Secret-Key", "1234")
 	resp, err = http.DefaultClient.Do(req)
 	if err != nil {
 		t.Fatal("error sending request: ", err)
@@ -143,7 +143,7 @@ func TestBlobServer(t *testing.T) {
 	if err != nil {
 		t.Fatal("error creating delete blob request: ", err)
 	}
-	deleteBlobReq.Header.Set("Authorization", "Bearer 1234")
+	deleteBlobReq.Header.Set("Secret-Key", "1234")
 	deleteBlobResp, err := http.DefaultClient.Do(deleteBlobReq)
 	if err != nil {
 		t.Fatal("error sending delete blob request: ", err)
@@ -159,7 +159,7 @@ func TestBlobServer(t *testing.T) {
 	if err != nil {
 		t.Fatal("error creating delete bucket request: ", err)
 	}
-	deleteBucketReq.Header.Set("Authorization", "Bearer 1234")
+	deleteBucketReq.Header.Set("Secret-Key", "1234")
 	deleteBucketResp, err := http.DefaultClient.Do(deleteBucketReq)
 	if err != nil {
 		t.Fatal("error sending delete bucket request: ", err)

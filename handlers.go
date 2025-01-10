@@ -278,7 +278,7 @@ func (me *Server) handleCreateAccess(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusCreated).JSON(access)
 }
 
-func (me *Server) handleAccess(c *fiber.Ctx) error {
+func (me *Server) handleDownloadWithAccess(c *fiber.Ctx) error {
 	key := strings.TrimSpace(c.Params("key"))
 	if key == "" {
 		return BadRequestError("invalid value for path param key")

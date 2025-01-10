@@ -262,7 +262,6 @@ func (me *MetadataStorage) getBlobOfAccess(key string) (*Blob, error) {
 
 func (me *MetadataStorage) migrate() error {
 	// NOTE: I want expirations for accesses to be managed by the client.
-	// TODO: make autoincrment PRIMARY key and allow updating bucket/blob metadata including names
 	query := `
     CREATE TABLE IF NOT EXISTS buckets (
         id TEXT,
@@ -292,6 +291,5 @@ func (me *MetadataStorage) migrate() error {
 	if _, err := me.db.Exec(query); err != nil {
 		return err
 	}
-
 	return nil
 }
