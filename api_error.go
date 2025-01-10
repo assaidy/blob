@@ -2,73 +2,73 @@ package blob
 
 import "github.com/gofiber/fiber/v2"
 
-type ApiError struct {
+type APIError struct {
 	Code          int    `json:"-"`
 	Message       string `json:"message"`
 	Errors        any    `json:"errors,omitempty"`
 	InternalError error  `json:"-"`
 }
 
-func (e ApiError) Error() string {
+func (e APIError) Error() string {
 	if e.InternalError == nil {
 		return e.Message
 	}
 	return e.InternalError.Error()
 }
 
-func InvalidJsonRequestError() ApiError {
-	return ApiError{
+func InvalidJsonRequestError() APIError {
+	return APIError{
 		Code:    fiber.StatusBadRequest,
 		Message: "failed to parse request body",
 	}
 }
 
-func BadRequestError(msg string) ApiError {
-	return ApiError{
+func BadRequestError(msg string) APIError {
+	return APIError{
 		Code:    fiber.StatusBadRequest,
 		Message: msg,
 	}
 }
 
-func InvalidDataError(msg string) ApiError {
-	return ApiError{
+func InvalidDataError(msg string) APIError {
+	return APIError{
 		Code:    fiber.StatusUnprocessableEntity,
 		Message: msg,
 	}
 }
 
-func ValidationError(errs any) ApiError {
-	return ApiError{
+func ValidationError(errs any) APIError {
+	return APIError{
 		Code:    fiber.StatusUnprocessableEntity,
 		Message: "invalid request data",
 		Errors:  errs,
 	}
 }
 
-func ConflictError(msg string) ApiError {
-	return ApiError{
+func ConflictError(msg string) APIError {
+	return APIError{
 		Code:    fiber.StatusConflict,
 		Message: msg,
 	}
 }
 
-func NotFoundError(msg string) ApiError {
-	return ApiError{
+func NotFoundError(msg string) APIError {
+	return APIError{
 		Code:    fiber.StatusNotFound,
 		Message: msg,
 	}
 }
 
-func InternalServerError(err error) ApiError {
-	return ApiError{
+func InternalServerError(err error) APIError {
+	return APIError{
 		Code:          fiber.StatusInternalServerError,
 		Message:       "internal server error",
 		InternalError: err,
 	}
 }
 
-func UnauthorizedError() ApiError {
-	return ApiError{
+func UnauthorizedError() APIError {
+	return APIError{
 		Code:    fiber.StatusUnauthorized,
 		Message: "unauthorized",
 	}
