@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/assaidy/blob/utils"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
@@ -82,14 +83,14 @@ func (me *Server) regesterRoutes() {
 func (me *Server) mwWithSecreteKey(c *fiber.Ctx) error {
 	key := strings.TrimSpace(c.Get("Secret-Key"))
 	if key == "" || key != me.secretKey {
-		return UnauthorizedError()
+		return utils.UnauthorizedError()
 	}
 	return c.Next()
 }
 
 // errorHandler is a custom error handler that formats errors for the API response.
 func errorHandler(c *fiber.Ctx, err error) error {
-	var apiE *APIError
+	var apiE *utils.APIError
 	// Handle API-specific errors and respond with JSON.
 	if errors.As(err, &apiE) {
 		c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSON)

@@ -6,6 +6,7 @@ import (
 	"os"
 	"testing"
 	"time"
+    "github.com/assaidy/blob"
 )
 
 func createSmallFile() {
@@ -45,8 +46,8 @@ func TestBlobServer(t *testing.T) {
 
 	go func() {
 		t.Log("starting blob server...")
-		s := NewServer(ServerConfig{
-			MaxChunkSize: 1 * MB,
+		s := blob.NewServer(blob.ServerConfig{
+			MaxChunkSize: 1 * blob.MB,
 			SecretKey:    "1234",
 			RootDir:      "./root_dir",
 			MetadataDir:  "./metadata_dir",

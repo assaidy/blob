@@ -9,11 +9,11 @@ import (
 type DataUnite int
 
 const (
-	B  DataUnite = 1
-	KB DataUnite = 1024
-	MB DataUnite = 1024 * KB
-	GB DataUnite = 1024 * MB
-	TB DataUnite = 1024 * GB
+	Byte DataUnite = 1
+	KB   DataUnite = 1024
+	MB   DataUnite = 1024 * KB
+	GB   DataUnite = 1024 * MB
+	TB   DataUnite = 1024 * GB
 )
 
 type Server struct {
@@ -21,7 +21,7 @@ type Server struct {
 	secretKey    string
 	maxChunkSize DataUnite
 	router       *fiber.App
-	metadata     *MetadataStorage
+	metadata     *metadataStorage
 }
 
 type Bucket struct {

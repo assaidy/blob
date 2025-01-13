@@ -9,11 +9,11 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-type MetadataStorage struct {
+type metadataStorage struct {
 	db *sql.DB
 }
 
-func NewMetadataStorage(dir string) *MetadataStorage {
+func NewMetadataStorage(dir string) *metadataStorage {
 	db, err := sql.Open("sqlite3", filepath.Join(dir, "metadata.db"))
 	if err != nil {
 		panic(fmt.Sprintf("error connecting to db: %+v", err))
@@ -23,7 +23,7 @@ func NewMetadataStorage(dir string) *MetadataStorage {
 		panic(fmt.Sprintf("error pinging db: %+v", err))
 	}
 
-	metadata := &MetadataStorage{db: db}
+	metadata := &metadataStorage{db: db}
 
 	if err := metadata.migrate(); err != nil {
 		panic(fmt.Sprintf("error migrating db: %+v", err))
@@ -32,7 +32,7 @@ func NewMetadataStorage(dir string) *MetadataStorage {
 	return metadata
 }
 
-func (me *MetadataStorage) checkIfBucketExists(id string) (bool, error) {
+func (me *metadataStorage) checkIfBucketExists(id string) (bool, error) {
 	query := `SELECT 1 FROM buckets WHERE id = ?;`
 	if err := me.db.QueryRow(query, id).Scan(new(int)); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -43,7 +43,7 @@ func (me *MetadataStorage) checkIfBucketExists(id string) (bool, error) {
 	return true, nil
 }
 
-func (me *MetadataStorage) createBucket(bucket *Bucket) error {
+func (me *metadataStorage) createBucket(bucket *Bucket) error {
 	query := `
     INSERT INTO buckets (id, created_at)
     VALUES (?, ?);
@@ -54,7 +54,7 @@ func (me *MetadataStorage) createBucket(bucket *Bucket) error {
 	return nil
 }
 
-func (me *MetadataStorage) createBlob(blob *Blob) error {
+func (me *metadataStorage) createBlob(blob *Blob) error {
 	query := `
     INSERT INTO blobs (id, bucket_id, size, created_at)
     VALUES (?, ?, ?, ?);
@@ -65,7 +65,7 @@ func (me *MetadataStorage) createBlob(blob *Blob) error {
 	return nil
 }
 
-func (me *MetadataStorage) getAllBuckets() ([]*Bucket, error) {
+func (me *metadataStorage) getAllBuckets() ([]*Bucket, error) {
 	query := `
     SELECT 
         id,
@@ -102,7 +102,7 @@ func (me *MetadataStorage) getAllBuckets() ([]*Bucket, error) {
 	return buckets, nil
 }
 
-func (me *MetadataStorage) getBucket(id string) (*Bucket, error) {
+func (me *metadataStorage) getBucket(id string) (*Bucket, error) {
 	query := `
     SELECT
         created_at
@@ -123,7 +123,7 @@ func (me *MetadataStorage) getBucket(id string) (*Bucket, error) {
 	return bucket, nil
 }
 
-func (me *MetadataStorage) deleteBucket(id string) error {
+func (me *metadataStorage) deleteBucket(id string) error {
 	query := `DELETE FROM buckets WHERE id = ?;`
 	if _, err := me.db.Exec(query, id); err != nil {
 		return err
@@ -131,7 +131,7 @@ func (me *MetadataStorage) deleteBucket(id string) error {
 	return nil
 }
 
-func (me *MetadataStorage) checkIfBlobExists(bucketId, blobId string) (bool, error) {
+func (me *metadataStorage) checkIfBlobExists(bucketId, blobId string) (bool, error) {
 	query := `SELECT 1 FROM blobs WHERE id = ? AND bucket_id = ?;`
 	if err := me.db.QueryRow(query, blobId, bucketId).Scan(new(int)); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -142,7 +142,7 @@ func (me *MetadataStorage) checkIfBlobExists(bucketId, blobId string) (bool, err
 	return true, nil
 }
 
-func (me *MetadataStorage) getBlobsPerBucket(id string) ([]*Blob, error) {
+func (me *metadataStorage) getBlobsPerBucket(id string) ([]*Blob, error) {
 	query := `
     select
         id,
@@ -173,7 +173,7 @@ func (me *MetadataStorage) getBlobsPerBucket(id string) ([]*Blob, error) {
 	return blobs, nil
 }
 
-func (me *MetadataStorage) getBlob(bucketId, blobId string) (*Blob, error) {
+func (me *metadataStorage) getBlob(bucketId, blobId string) (*Blob, error) {
 	query := `
     SELECT 
         size,
@@ -190,7 +190,7 @@ func (me *MetadataStorage) getBlob(bucketId, blobId string) (*Blob, error) {
 	return blob, nil
 }
 
-func (me *MetadataStorage) incrementBlobSize(bucketId, blobId string, amount int) error {
+func (me *metadataStorage) incrementBlobSize(bucketId, blobId string, amount int) error {
 	query := `
     UPDATE blobs 
     SET size = size + ? 
@@ -202,7 +202,7 @@ func (me *MetadataStorage) incrementBlobSize(bucketId, blobId string, amount int
 	return nil
 }
 
-func (me *MetadataStorage) deleteBlob(bucketId, blobId string) error {
+func (me *metadataStorage) deleteBlob(bucketId, blobId string) error {
 	query := `DELETE FROM blobs WHERE id = ? AND bucket_id = ?;`
 	if _, err := me.db.Exec(query, blobId, bucketId); err != nil {
 		return err
@@ -210,7 +210,7 @@ func (me *MetadataStorage) deleteBlob(bucketId, blobId string) error {
 	return nil
 }
 
-func (me *MetadataStorage) createAccess(accessKey *Access) error {
+func (me *metadataStorage) createAccess(accessKey *Access) error {
 	query := `
     INSERT INTO accesses (key, bucket_id, blob_id, created_at)
     VALUES (?, ?, ?, ?);
@@ -221,7 +221,7 @@ func (me *MetadataStorage) createAccess(accessKey *Access) error {
 	return nil
 }
 
-func (me *MetadataStorage) checkIfAccessExists(key string) (bool, error) {
+func (me *metadataStorage) checkIfAccessExists(key string) (bool, error) {
 	query := `SELECT 1 FROM accesses WHERE key = ?;`
 	if err := me.db.QueryRow(query, key).Scan(new(int)); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -232,7 +232,7 @@ func (me *MetadataStorage) checkIfAccessExists(key string) (bool, error) {
 	return true, nil
 }
 
-func (me *MetadataStorage) deleteAccess(key string) error {
+func (me *metadataStorage) deleteAccess(key string) error {
 	query := `DELETE FROM accesses WHERE key = ?;`
 	if _, err := me.db.Exec(query, key); err != nil {
 		return err
@@ -240,7 +240,7 @@ func (me *MetadataStorage) deleteAccess(key string) error {
 	return nil
 }
 
-func (me *MetadataStorage) getBlobOfAccess(key string) (*Blob, error) {
+func (me *metadataStorage) getBlobOfAccess(key string) (*Blob, error) {
 	query := `
     SELECT 
         blobs.id,
@@ -260,7 +260,7 @@ func (me *MetadataStorage) getBlobOfAccess(key string) (*Blob, error) {
 	return blob, nil
 }
 
-func (me *MetadataStorage) migrate() error {
+func (me *metadataStorage) migrate() error {
 	// NOTE: I want expirations for accesses to be managed by the client.
 	query := `
     CREATE TABLE IF NOT EXISTS buckets (
